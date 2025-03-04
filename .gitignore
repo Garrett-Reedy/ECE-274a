@@ -1,0 +1,48 @@
+# Ignore simulation and compilation output files
+*.log
+*.vcd
+*.wlf
+*.lxt
+*.vvp
+*.out
+*.o
+*.jou
+*.str
+*.pb
+*.syncts
+*.vst
+
+# Ignore temporary and backup files
+*.bak
+*.tmp
+*.swp
+*.swo
+*.sdf
+*.svf
+
+# Ignore synthesis and implementation files (for tools like Xilinx Vivado, Quartus, etc.)
+*.xpr
+*.bit
+*.ngc
+*.ngd
+*.ncd
+*.pcf
+*.dcp
+*.rpt
+*.ise
+*.xise
+*.qpf
+*.qsf
+*.qws
+*.ucf
+*.qdf
+*.tcl
+*.map
+*.syr
+*.xml
+*.prj
+
+# Ignore tool-specific cache directories
+.simvision/
+.sim/
+.work/
