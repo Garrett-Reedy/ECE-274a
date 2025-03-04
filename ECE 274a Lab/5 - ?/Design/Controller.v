@@ -14,7 +14,7 @@ module Controller(Clk, Rst, go, temp47_58, i_lt_16, done, W_en, R_en,
     output reg sum_clr, sum_ld; //clear/load for sum_reg
     output reg done; //controller output
     
-    parameter [2:0] SA = 0, SB = 1, SC = 2, SD = 3, SE = 4, SF = 5, SG = 6, SH = 7;
+    parameter [2:0] SA = 0, SB = 1, SC = 2, SD = 3, SE = 4, SF = 5, SG = 6, SH = 7; //states
     reg [2:0]  state, nextState;
     
     always @ (posedge Clk)
@@ -29,7 +29,7 @@ module Controller(Clk, Rst, go, temp47_58, i_lt_16, done, W_en, R_en,
             
         always @ (*) begin
             case(state)
-                SA: begin
+                SA: begin //Initial
                     W_en = 0; 
                     R_en = 0; 
                     i_clr = 0; 
@@ -49,7 +49,7 @@ module Controller(Clk, Rst, go, temp47_58, i_lt_16, done, W_en, R_en,
                         nextState = SA;
                     end
                 end
-                SB: begin
+                SB: begin //Clear address, temp, count, and sum
                     W_en = 0; 
                     R_en = 0; 
                     i_clr = 1; 
@@ -64,7 +64,7 @@ module Controller(Clk, Rst, go, temp47_58, i_lt_16, done, W_en, R_en,
                 
                     nextState = SC;
                 end
-                SC: begin
+                SC: begin //Start of loop
                     W_en = 0; 
                     R_en = 0; 
                     i_clr = 0; 
@@ -80,11 +80,11 @@ module Controller(Clk, Rst, go, temp47_58, i_lt_16, done, W_en, R_en,
                     if (i_lt_16) begin
                         nextState = SD;
                     end
-                    else begin 
-                        nextState = SH;
+                    else begin
+                        nextState = SH; //loop ends
                     end
                 end
-                SD: begin
+                SD: begin //Read data to temp, add R_data to sum
                     W_en = 0; 
                     R_en = 1; 
                     i_clr = 0; 
@@ -99,7 +99,7 @@ module Controller(Clk, Rst, go, temp47_58, i_lt_16, done, W_en, R_en,
                     
                     nextState = SE;
                 end
-                SE: begin
+                SE: begin //Sets values back to zero
                     W_en = 0; 
                     R_en = 0; 
                     i_clr = 0; 
@@ -119,7 +119,7 @@ module Controller(Clk, Rst, go, temp47_58, i_lt_16, done, W_en, R_en,
                         nextState = SG;
                     end
                 end
-                SF: begin
+                SF: begin //if 47 < temp < 58: increments count, updates data to temp - 48
                     W_en = 1; 
                     R_en = 0; 
                     i_clr = 0; 
@@ -134,7 +134,7 @@ module Controller(Clk, Rst, go, temp47_58, i_lt_16, done, W_en, R_en,
                     
                     nextState = SG;
                 end
-                SG: begin
+                SG: begin //increments address
                     W_en = 0; 
                     R_en = 0; 
                     i_clr = 0; 
@@ -147,9 +147,9 @@ module Controller(Clk, Rst, go, temp47_58, i_lt_16, done, W_en, R_en,
                     sum_ld = 0;
                     done = 0;
                     
-                    nextState = SC;
+                    nextState = SC; //Restarts loop
                 end
-                SH: begin
+                SH: begin //Sets done to 1
                     W_en = 0; 
                     R_en = 0; 
                     i_clr = 0; 
