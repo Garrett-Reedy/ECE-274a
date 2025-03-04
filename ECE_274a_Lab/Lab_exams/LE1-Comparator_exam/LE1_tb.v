@@ -6,7 +6,7 @@ wire F_tb, G_tb;
 
 LE1 a(A1_tb, A0_tb, B1_tb, B0_tb, F_tb, G_tb);
 
-initial begin
+initial begin //comparing every possibility of A1A0 and B1B0
     //case 0
     A1_tb <= 0; A0_tb <= 0; B1_tb <= 0; B0_tb <= 0;
         
